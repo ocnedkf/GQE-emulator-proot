@@ -48,7 +48,6 @@ wget --quiet --show-progress https://cdimage.ubuntu.com/ubuntu-base/releases/24.
 
 echo ""
 echo -e "Unpacking Ubuntu Rootfs...\n"
-mkdir $HOME/.gqe-data-proot
 tar -xvzf ubuntu-base-24.04.3-base-arm64.tar.gz -C /data/data/com.termux/files/home/.gqe-data-proot
 rm -f ubuntu-base-24.04.3-base-arm64.tar.gz
 
