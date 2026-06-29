@@ -1,0 +1,92 @@
+#!/data/data/com.termux/files/usr/bin/bash
+clear
+
+echo -e "Welcome to the GQE-proot installation script\n"
+echo -e "We will now begin the installation process\n"
+sleep 1
+
+echo -e "Please grant storage permissions\n"
+echo -e "If already granted, this can be ignored\n"
+termux-setup-storage & sleep 0
+sleep 10
+if [ ! -e $HOME/storage ]; then
+echo -e "Failed to check the directory , Please ensure that you have granted storage permissions\n"
+exit 1
+fi
+
+echo -e "Updating termux package...\n"
+apt-get clean
+apt-get update >/dev/null 2>&1
+apt-get -y --with-new-pkgs -o Dpkg::Options::="--force-confdef" upgrade >/dev/null 2>&1
+
+echo -e "Installing necessary...\n"
+pkg install x11-repo pulseaudio proot wget termux-x11-nightly tar xz-utils >/dev/null
+
+echo -e "Downloading Box64...\n"
+rm -f box64.tar.xz
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/releases/download/v0.1-beta/box64.tar.xz
+
+echo ""
+echo -e "Unpacking Box64...\n"
+mkdir -p /data/data/com.termux/files/.gqe-data-proot
+tar -xJf box64.tar.xz -C /data/data/com.termux/files/.gqe-data-proot/
+rm -f box64.tar.xz
+
+echo -e "Downloading Wine...\n"
+rm -f winewow64.tar.xz
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/releases/download/v0.1-beta/winewow64.tar.xz
+
+echo ""
+echo -e "Unpacking Wine...\n"
+mkdir -p /data/data/com.termux/files/.gqe-data-proot/opt
+tar -xJf winewow64.tar.xz -C /data/data/com.termux/files/.gqe-data-proot/opt
+rm -f winewow64.tar.xz
+
+echo -e "Downloading Ubuntu Rootfs...\n"
+rm -f ubuntu-base-24.04.3-base-arm64.tar.gz
+wget --quiet --show-progress https://cdimage.ubuntu.com/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.3-base-arm64.tar.gz
+
+echo ""
+echo -e "Unpacking Ubuntu Rootfs...\n"
+mkdir $HOME/.gqe-data-proot
+tar -xvzf ubuntu-base-24.04.3-base-arm64.tar.gz -C $HOME/.gqe-data-proot
+rm -f ubuntu-base-24.04.3-base-arm64.tar.gz
+
+echo -e "Initializing container...\n"
+wget --quiet -P $HOME/.gqe-data-proot/root https://raw.githubusercontent.com/ocnedkf/GQE-emulator-proot/refs/heads/main/initialization-sh
+chmod +x $HOME/.gqe-data-proot/root/initialization-sh
+
+unset LD_PRELOAD
+pkill -f proot
+proot \
+    --link2symlink \
+    -0 \
+    --sysvipc \
+    --kill-on-exit \
+    -L \
+    -r /data/data/com.termux/files/home/.gqe-data-proot \
+    -w /root \
+    -b /dev \
+    -b /sys \
+    -b /data/data/com.termux/files/usr/tmp:/tmp \
+    -b /data/data/com.termux/files/home/.gqe-data-proot/root:/dev/shm \
+    -b /sdcard:/sdcard \
+    /usr/bin/env -i \
+    HOME=/root \
+    TERM=$TERM \
+    PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games \
+    TMPDIR=/tmp \
+    /bin/bash /root/initialization-sh
+
+echo -e "Downloading GQE startup script...\n"
+wget --quiet --show-progress -P /data/data/com.termux/files/usr/bin https://raw.githubusercontent.com/ocnedkf/GQE-emulator-proot/refs/heads/main/start-proot-gqe
+chmod 755 /data/data/com.termux/files/usr/bin/start-proot-gqe
+
+echo ""
+echo -e 'Starting to launch GQE, Next time use "start-proot-gqe" command to run it\n'
+sleep 2
+
+start-proot-gqe
+
+clear
+rm -rf "$0"
