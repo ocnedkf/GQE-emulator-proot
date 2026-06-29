@@ -28,8 +28,8 @@ wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/relea
 
 echo ""
 echo -e "Unpacking Box64...\n"
-mkdir -p /data/data/com.termux/files/.gqe-data-proot
-tar -xJf box64.tar.xz -C /data/data/com.termux/files/.gqe-data-proot/
+mkdir -p /data/data/com.termux/files/home/.gqe-data-proot
+tar -xJf box64.tar.xz -C /data/data/com.termux/files/home/.gqe-data-proot/
 rm -f box64.tar.xz
 
 echo -e "Downloading Wine...\n"
@@ -38,8 +38,8 @@ wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/relea
 
 echo ""
 echo -e "Unpacking Wine...\n"
-mkdir -p /data/data/com.termux/files/.gqe-data-proot/opt
-tar -xJf winewow64.tar.xz -C /data/data/com.termux/files/.gqe-data-proot/opt
+mkdir -p /data/data/com.termux/files/home/.gqe-data-proot/opt
+tar -xJf winewow64.tar.xz -C /data/data/com.termux/files/home/.gqe-data-proot/opt
 rm -f winewow64.tar.xz
 
 echo -e "Downloading Ubuntu Rootfs...\n"
@@ -49,7 +49,7 @@ wget --quiet --show-progress https://cdimage.ubuntu.com/ubuntu-base/releases/24.
 echo ""
 echo -e "Unpacking Ubuntu Rootfs...\n"
 mkdir $HOME/.gqe-data-proot
-tar -xvzf ubuntu-base-24.04.3-base-arm64.tar.gz -C /data/data/com.termux/files/.gqe-data-proot
+tar -xvzf ubuntu-base-24.04.3-base-arm64.tar.gz -C /data/data/com.termux/files/home/.gqe-data-proot
 rm -f ubuntu-base-24.04.3-base-arm64.tar.gz
 
 echo -e "Initializing container...\n"
