@@ -1,0 +1,101 @@
+#!/bin/bash
+clear
+
+echo -e "Setting up DNS...\n"
+echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+
+echo -e "Updating package lists...\n"
+apt update
+
+echo -e "Installing necessary...\n"
+apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 libgl1-mesa-dri libglx-mesa0 libfontconfig1 libxxf86vm1 libxrender1 libxfixes3 libxi6 libpng16-16 libgstreamer-plugins-base1.0-0 gettext 
+
+echo -e "Initializing Wine prefix...\n"
+env WINEDLLOVERRIDES="mscoree=" \
+BOX64_PATH=/opt/wine/bin/wine64 \
+BOX64_LD_LIBRARY=/opt/wine/lib \
+box64 wine64 wineboot -i
+
+echo -e "Configuring Wine...\n"
+rm -rf /opt/{InputBridge,startmenu} startmenulink.tar.xz startmenu.tar.xz
+wget --quiet --show-progress -P $HOME/.wine/drive_c/windows https://github.com/radzikpwnz/tfm/releases/download/v1.0.1/TFM.exe
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/releases/download/v0.1-beta/startmenulink.tar.xz
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/releases/download/v0.1-beta/startmenu.tar.xz
+tar -xJf startmenu.tar.xz -C /usr/opt
+tar -xJf startmenulink.tar.xz -C "$HOME/.wine/drive_c/users/root/AppData/Roaming/Microsoft/Windows/Start Menu"
+rm -f startmenulink.tar.xz startmenu.tar.xz
+
+echo ""
+echo -e "Downloading Gecko(64 bit)...\n"
+cd $HOME
+rm -f wine-gecko-2.47.4-x86_64.msi
+wget --quiet --show-progress https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+
+echo ""
+echo -e "Installing Gecko(64 bit)...\n"
+box64 wine64 msiexec /i wine-gecko-2.47.4-x86_64.msi >/dev/null 2>&1
+rm -f wine-gecko-2.47.4-x86_64.msi
+
+echo -e "Downloading Gecko(32 bit)...\n"
+rm -f wine-gecko-2.47.4-x86.msi
+wget --quiet --show-progress https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86.msi
+
+echo ""
+echo -e "Installing Gecko(32 bit)...\n"
+box64 wine64 msiexec /i wine-gecko-2.47.4-x86.msi >/dev/null 2>&1
+rm -f wine-gecko-2.47.4-x86.msi
+
+echo -e "Downloading Mono...\n"
+rm -f wine-mono-9.4.0-x86.msi
+wget --quiet --show-progress https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+
+echo ""
+echo -e "Installing Mono...\n"
+box64 wine64 msiexec /i wine-mono-9.4.0-x86.msi >/dev/null 2>&1
+rm -f wine-mono-9.4.0-x86.msi
+
+echo -e "Downloading InputBridge...\n"
+rm -f inputbridge.tar.xz
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator/releases/download/v0.1-beta/inputbridge.tar.xz
+tar -xJf inputbridge.tar.xz -C /usr/opt
+rm -f inputbridge.tar.xz
+
+echo ""
+echo -e "Installing InputBridge...\n"
+touch install-ib.bat
+echo "cd Z:\\opt\\InputBridge\\" > install-ib.bat
+echo ".\install.bat" >> install-ib.bat
+echo "exit" >> install-ib.bat
+box64 wine64 cmd /c Z:\\home\\root\\install-ib.bat >/dev/null 2>&1
+rm install-ib.bat
+
+echo -e "Setting drive letter...\n"
+ln -s /sdcard/Download $HOME/.wine/dosdevices/d:
+ln -s /sdcard $HOME/.wine/dosdevices/e:
+
+echo -e "Downloading DLL file...\n"
+wget --quiet --show-progress -P $HOME/.wine/drive_c/windows/syswow64 https://github.com/ocnedkf/GQE-emulator/releases/download/v0.1-beta/mfc42.dll
+
+echo ""
+echo -e "Setting DLL overrides...\n"
+rm -f dllsetting.reg
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator/releases/download/v0.1-beta/dllsetting.reg
+box64 box64-bash regedit dllsetting.reg >/dev/null 2>&1
+rm -f dllsetting.reg
+
+echo ""
+echo -e "Configuring startup scripts...\n"
+rm -rf $HOME/storage/shared/.gqe-start
+mkdir -p $HOME/storage/shared/.gqe-start
+touch $HOME/storage/shared/.gqe-start/start-gqe.bat
+echo "start /min Z:\\usr\\opt\\InputBridge\\ib.exe" > $HOME/storage/shared/.gqe-start/start-gqe.bat
+echo 'start TFM.exe C:\' >> $HOME/storage/shared/.gqe-start/start-gqe.bat
+
+touch $HOME/storage/shared/.gqe-start/mesa_var.txt
+touch $HOME/storage/shared/.gqe-start/mesa_var_v.txt
+touch $HOME/storage/shared/.gqe-start/mesa_var_f.txt
+echo "virpipe" > $HOME/storage/shared/.gqe-start/mesa_var.txt
+
+echo -e "Configuration Completed\n"
+
+echo -e "Initialization complete\n"
