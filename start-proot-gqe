@@ -1,0 +1,131 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+show_info() {
+cat << EOF
+==================== Introduction ====================
+
+GQE-emulator by ocnedkf
+
+GQE-emulator is an emulator capable of running Windows x86_64 applications.
+
+More details: https://github.com/ocnedkf/GQE-emulator
+EOF
+}
+
+show_help() {
+cat << EOF
+==================== Usage ====================
+
+usage : start-gqe [option]
+        start-gqe            Launch GQE normally
+        start-gqe --help/-h  Print introduction and help info then exit
+EOF
+}
+
+for cs in "$@"
+do
+    if [ "$cs" = "-h" ] || [ "$cs" = "--help" ]; then
+        show_info
+        show_help
+        exit 0
+    fi
+done
+
+if [ $# -gt 0 ]; then
+    echo -e "Unsupported argument\n"
+    show_help
+    exit 1
+fi
+
+if [ ! -d "$HOME/.gqe-data-proot/drive_c/windows" ]; then
+clear
+echo -e "Wine prefix missing! try reinitializing...\n"
+rm -f $HOME/.gqe-data-proot/root/initialization-sh
+wget --show-progress --quiet -P $HOME/.gqe-data-proot/root https://raw.githubusercontent.com/ocnedkf/GQE-emulator-proot/refs/heads/main/initialization-sh
+chmod +x $HOME/.gqe-data-proot/root/initialization-sh
+unset LD_PRELOAD
+pkill -f proot
+proot \
+    --link2symlink \
+    -0 \
+    --sysvipc \
+    --kill-on-exit \
+    -L \
+    -r /data/data/com.termux/files/home/.gqe-data-proot \
+    -w /root \
+    -b /dev \
+    -b /sys \
+    -b /data/data/com.termux/files/usr/tmp:/tmp \
+    -b /data/data/com.termux/files/home/.gqe-data-proot/root:/dev/shm \
+    -b /sdcard:/sdcard \
+    /usr/bin/env -i \
+    HOME=/root \
+    TERM=$TERM \
+    PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games \
+    TMPDIR=/tmp \
+    /bin/bash /root/initialization-sh
+rm -f $HOME/.gqe-data-proot/root/initialization-sh
+fi
+
+if [ ! -d "$HOME/storage" ]; then
+echo -e "External storage not found! Please check your storage permissions"
+exit 1
+fi
+
+if ps a | grep -q '[p]root'; then
+echo -e "Another Proot process is already running, which may affect the startup of GQE"
+echo -e "Refusal to Start\n"
+exit 1
+fi
+
+rm -rf $PREFIX/tmp/pulse-*
+pulseaudio -k >/dev/null 2>&1
+pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+
+pkill -f virgl
+virgl_test_server --use-gles --use-egl-surfaceless &
+
+pkill -f termux-x11
+termux-x11 :13 >/dev/null 2>&1 &
+
+if am start -n com.termux.x11/.MainActivity; then
+sleep 0.8
+termux-x11-preference displayResolutionMode:exact displayResolutionExact:1024x768 || echo "Failed to set display resolution"
+else
+echo "Failed to start Termux:X11. Please ensure it is installed"
+fi
+
+unset LD_PRELOAD
+proot \
+    --link2symlink \
+    -0 \
+    --sysvipc \
+    --kill-on-exit \
+    -L \
+    -r /data/data/com.termux/files/home/.gqe-data-proot \
+    -w /root \
+    -b /dev \
+    -b /sys \
+    -b /data/data/com.termux/files/usr/tmp:/tmp \
+    -b /data/data/com.termux/files/home/.gqe-data-proot/root:/dev/shm \
+    -b /sdcard:/sdcard \
+    /usr/bin/env -i \
+    HOME=/root \
+    TERM=$TERM \
+    PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games \
+    TMPDIR=/tmp \
+    DXVK_ASYNC=1 \
+    BOX64_ASYNC=1 \
+    MESA_VK_DEVICE_SELECT=$(cat /sdcard/.gqe-start-proot/mesa_var_v.txt) \
+    VK_ICD_FILENAMES=$(cat /sdcard/.gqe-start-proot/mesa_var_f.txt) \
+    GALLIUM_DRIVER=$(cat /sdcard/.gqe-start-proot/mesa_var.txt) \
+    DXVK_HUD=1 \
+    MESA_NO_ERROR=1 \
+    BOX64_PATH=/opt/wine/bin/wine64 \
+    BOX64_LD_LIBRARY_PATH=/opt/wine/lib \
+    box64 wine64 explorer /desktop=shell,1024x768 Z://sdcard//.gqe-start-proot//start-proot-gqe.bat
+
+pkill -f termux-x11
+pulseaudio -k >/dev/null 2>&1
+rm -rf $PREFIX/tmp/pulse-*
+pkill -f virgl
