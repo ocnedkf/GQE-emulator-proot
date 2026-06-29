@@ -16,9 +16,9 @@ show_help() {
 cat << EOF
 ==================== Usage ====================
 
-usage : start-gqe [option]
-        start-gqe            Launch GQE normally
-        start-gqe --help/-h  Print introduction and help info then exit
+usage : start-proot-gqe [option]
+        start-proot-gqe            Launch GQE normally
+        start-proot-gqe --help/-h  Print introduction and help info then exit
 EOF
 }
 
