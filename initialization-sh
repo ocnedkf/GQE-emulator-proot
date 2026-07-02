@@ -10,8 +10,10 @@ groupadd -g 50258 g_50258
 groupadd -g 99909997 g_99909997
 usermod -aG g_1077,g_3003,g_9997,g_20258,g_50258,g_99909997 root
 
+if [ ! -s "/etc/resolv.conf" ]; then
 echo -e "Setting up DNS...\n"
 echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+fi
 
 echo -e "Updating package lists...\n"
 apt update
