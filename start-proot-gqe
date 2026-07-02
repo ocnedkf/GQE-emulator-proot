@@ -114,6 +114,7 @@ proot \
     TERM=$TERM \
     PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games \
     TMPDIR=/tmp \
+    PULSE_LATENCY_MSEC=20 \
     DXVK_ASYNC=1 \
     BOX64_ASYNC=1 \
     MESA_VK_DEVICE_SELECT=$(cat /sdcard/.gqe-start-proot/mesa_var_v.txt) \
@@ -123,7 +124,7 @@ proot \
     MESA_NO_ERROR=1 \
     BOX64_PATH=/opt/wine/bin/wine64 \
     BOX64_LD_LIBRARY_PATH=/opt/wine/lib \
-    box64 wine64 explorer /desktop=shell,1024x768 Z://sdcard//.gqe-start-proot//start-proot-gqe.bat
+    box64 wine64 explorer /desktop=shell,1024x768 Z:\\sdcard\\.gqe-start-proot\\start-proot-gqe.bat
 
 pkill -f termux-x11
 pulseaudio -k >/dev/null 2>&1
