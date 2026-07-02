@@ -49,8 +49,8 @@ echo -e "Wine prefix missing! try reinitializing...\n"
 rm -f $HOME/.gqe-data-proot/root/initialization-sh
 wget --show-progress --quiet -P $HOME/.gqe-data-proot/root https://raw.githubusercontent.com/ocnedkf/GQE-emulator-proot/refs/heads/main/initialization-sh
 chmod +x $HOME/.gqe-data-proot/root/initialization-sh
+
 unset LD_PRELOAD
-pkill -f proot
 proot \
     --link2symlink \
     -0 \
