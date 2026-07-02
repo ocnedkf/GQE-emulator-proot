@@ -37,6 +37,12 @@ if [ $# -gt 0 ]; then
     exit 1
 fi
 
+if ps a | grep -q '[p]root'; then
+echo -e "Another Proot process is already running, which may affect the startup of GQE"
+echo -e "Refusal to Start\n"
+exit 1
+fi
+
 if [ ! -d "$HOME/.gqe-data-proot/drive_c/windows" ]; then
 clear
 echo -e "Wine prefix missing! try reinitializing...\n"
@@ -69,12 +75,6 @@ fi
 
 if [ ! -d "$HOME/storage" ]; then
 echo -e "External storage not found! Please check your storage permissions"
-exit 1
-fi
-
-if ps a | grep -q '[p]root'; then
-echo -e "Another Proot process is already running, which may affect the startup of GQE"
-echo -e "Refusal to Start\n"
 exit 1
 fi
 
