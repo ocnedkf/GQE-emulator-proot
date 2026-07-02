@@ -1,6 +1,15 @@
 #!/bin/bash
 clear
 
+echo -e "Adding the missing Group GID...\n"
+groupadd -g 1077 g_1077
+groupadd -g 3003 g_3003
+groupadd -g 9997 g_9997
+groupadd -g 20258 g_20258
+groupadd -g 50258 g_50258
+groupadd -g 99909997 g_99909997
+usermod -aG g_1077,g_3003,g_9997,g_20258,g_50258,g_99909997 root
+
 echo -e "Setting up DNS...\n"
 echo 'nameserver 8.8.8.8' > /etc/resolv.conf
 
