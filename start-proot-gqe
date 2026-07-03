@@ -4,9 +4,9 @@ show_info() {
 cat << EOF
 ==================== Introduction ====================
 
-GQE-emulator-proot by ocnedkf
+GQE-emulator-proot (Abbreviated as GQE-proot) by ocnedkf
 
-GQE is an emulator capable of running Windows x86_64 applications.
+GQE-proot is an emulator capable of running Windows x86_64 applications.
 
 More details: https://github.com/ocnedkf/GQE-emulator-proot
 EOF
