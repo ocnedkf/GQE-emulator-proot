@@ -122,7 +122,7 @@ proot \
     GALLIUM_DRIVER=$(cat /sdcard/.gqe-start-proot/mesa_var.txt) \
     DXVK_HUD=1 \
     MESA_NO_ERROR=1 \
-    BOX64_PATH=/opt/wine/bin/wine64 \
+    BOX64_PATH=/opt/wine/bin/ \
     BOX64_LD_LIBRARY_PATH=/opt/wine/lib \
     box64 wine64 explorer /desktop=shell,1024x768 Z:\\sdcard\\.gqe-start-proot\\start-proot-gqe.bat
 
