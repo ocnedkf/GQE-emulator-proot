@@ -29,7 +29,7 @@ wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/relea
 
 echo ""
 echo -e "Unpacking Box64...\n"
-mkdir -p /data/data/com.termux/files/home/.gqe-data-proot
+mkdir -p /data/data/com.termux/files/home/.gqe-data-proot/opt
 tar -xJf box64.tar.xz -C /data/data/com.termux/files/home/.gqe-data-proot/ >/dev/null 2>&1
 rm -f box64.tar.xz
 
@@ -39,7 +39,6 @@ wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator-proot/relea
 
 echo ""
 echo -e "Unpacking Wine...\n"
-mkdir -p /data/data/com.termux/files/home/.gqe-data-proot/opt
 tar -xJf winewow64.tar.xz -C /data/data/com.termux/files/home/.gqe-data-proot/opt >/dev/null 2>&1
 rm -f winewow64.tar.xz
 
