@@ -70,7 +70,6 @@ proot \
     PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games \
     TMPDIR=/tmp \
     /bin/bash /root/initialization-sh
-rm -f $HOME/.gqe-data-proot/root/initialization-sh
 fi
 
 if [ ! -d "$HOME/storage" ]; then
