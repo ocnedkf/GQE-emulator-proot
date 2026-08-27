@@ -69,6 +69,7 @@ proot \
     -w /root \
     -b /dev \
     -b /sys \
+    -b /proc \
     -b /data/data/com.termux/files/usr/tmp:/tmp \
     -b /data/data/com.termux/files/home/.gqe-data-proot/root:/dev/shm \
     -b /sdcard:/sdcard \
