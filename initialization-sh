@@ -23,7 +23,7 @@ apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 libgl1-mesa-dri lib
 
 echo -e "Initializing Wine prefix...\n"
 env WINEDLLOVERRIDES="mscoree=" \
-BOX64_PATH=/opt/wine/bin/wine64 \
+BOX64_PATH=/opt/wine/bin \
 BOX64_LD_LIBRARY_PATH=/opt/wine/lib \
 box64 wine64 wineboot -i >/dev/null 2>&1
 
