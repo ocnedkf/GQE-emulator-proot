@@ -22,9 +22,9 @@ echo -e "Installing necessary...\n"
 apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 libgl1-mesa-dri libglx-mesa0 libfontconfig1 libxxf86vm1 libxrender1 libglx0 libxfixes3 libxi6 libpng16-16 libgstreamer-plugins-base1.0-0 gettext xz-utils wget libgl1 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-plugins-libav >/dev/null 2>&1
 
 echo -e "Initializing Wine prefix...\n"
+export BOX64_PATH=/opt/wine/bin
+export BOX64_LD_LIBRARY_PATH=/opt/wine/lib
 env WINEDLLOVERRIDES="mscoree=" \
-BOX64_PATH=/opt/wine/bin \
-BOX64_LD_LIBRARY_PATH=/opt/wine/lib \
 box64 wine64 wineboot -i >/dev/null 2>&1
 
 echo -e "Configuring Wine...\n"
