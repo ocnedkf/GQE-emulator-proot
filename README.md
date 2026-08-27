@@ -1,3 +1,5 @@
+**Warning: This repository is still under development. Do not attempt to install it on your own; you do so at your own risk.**
+
 > [!NOTE]
 > This repository is another 'Proot container' implementation scheme of [GQE-emulator](https://github.com/ocnedkf/GQE-emulator) ，Currently still being organized
 
