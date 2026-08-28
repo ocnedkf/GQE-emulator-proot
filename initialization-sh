@@ -19,7 +19,7 @@ echo -e "Updating package lists...\n"
 apt update >/dev/null 2>&1
 
 echo -e "Installing necessary...\n"
-apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 locales libgl1-mesa-dri libglx-mesa0 libfontconfig1 libxxf86vm1 libxrender1 libglx0 libxfixes3 libxi6 libpng16-16 libgstreamer-plugins-base1.0-0 gettext xz-utils wget libgl1 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-plugins-libav >/dev/null 2>&1
+apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 locales libgl1-mesa-dri libgtk-3-0 libglx-mesa0 libfontconfig1 libxxf86vm1 libxrender1 libglx0 libxfixes3 libxi6 libpng16-16 libgstreamer-plugins-base1.0-0 gettext xz-utils wget libgl1 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad >/dev/null 2>&1
 
 echo -e "Configuring area files...\n"
 locale-gen ru_RU.UTF-8 ko_KR.UTF-8 de_DE.UTF-8 zh_TW.UTF-8 zh_CN.UTF-8 ja_JP.UTF-8 en_US.UTF-8
