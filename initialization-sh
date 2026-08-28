@@ -29,8 +29,8 @@ wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator/releases/do
 
 echo ""
 echo -e "Installing Fonts...\n"
-mkdir -p /data/data/com.termux/files/usr/glibc/share/fonts
-tar -xJf fonts.tar.xz -C /data/data/com.termux/files/usr/glibc/share/fonts
+mkdir -p /usr/share/fonts
+tar -xJf fonts.tar.xz -C /usr/share/fonts
 rm -f fonts.tar.xz
 
 echo ""
