@@ -24,6 +24,15 @@ apt install -y libx11-6 libdrm2 libudev0 libxext6 libxrandr2 locales libgl1-mesa
 echo -e "Configuring area files...\n"
 locale-gen ru_RU.UTF-8 ko_KR.UTF-8 de_DE.UTF-8 zh_TW.UTF-8 zh_CN.UTF-8 ja_JP.UTF-8 en_US.UTF-8
 
+echo -e "Downloading Fonts...\n"
+wget --quiet --show-progress https://github.com/ocnedkf/GQE-emulator/releases/download/v0.1-beta/fonts.tar.xz
+
+echo ""
+echo -e "Installing Fonts...\n"
+mkdir -p /data/data/com.termux/files/usr/glibc/share/fonts
+tar -xJf fonts.tar.xz -C /data/data/com.termux/files/usr/glibc/share/fonts
+rm -f fonts.tar.xz
+
 echo ""
 echo -e "Initializing Wine prefix...\n"
 export BOX64_PATH=/opt/wine/bin
